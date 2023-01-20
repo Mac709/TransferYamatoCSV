@@ -61,15 +61,15 @@ public class YamatoCSVTranfer {
         pw.print(",");
         pw.print("");
         pw.print(",");
-        pw.print("569281163");
+        pw.print("#######");//依頼者電話番号
         pw.print(",");
         pw.print("");
         pw.print(",");
-        pw.print("4750017");
+        pw.print("#####");//依頼者郵便番号
         pw.print(",");
-        pw.print("愛知県半田市有脇町13-96-2");
+        pw.print("#####");//依頼者住所
         pw.print(",");
-        pw.print("株式会社NAO RICE");
+        pw.print("#####");//依頼者組織名
         pw.print(",");
         pw.print("");
         pw.print(",");
@@ -99,7 +99,7 @@ public class YamatoCSVTranfer {
         pw.print(",");
         pw.print("");
         pw.print(",");
-        pw.print("569281163");
+        pw.print("#####");//依頼者電話番号
         pw.print(",");
         pw.print("");
         pw.print(",");
