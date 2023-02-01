@@ -1,3 +1,5 @@
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -10,20 +12,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+//https://qiita.com/j-work/items/8f353db0d9bce5ff3b2a
+
 public class YamatoCSVTranfer {
   public static void main(String[] args) throws IOException {
     String line;
     // ファイルパス
-    Path path = Paths.get("trade.csv");
+    Path path1 = Paths.get("trade.csv");
+    Path path2 = Paths.get("store.csv");
     // ファイルの行数
-    long lineCount = Files.lines(path).count();
-    String[][] data = new String[(int) lineCount][9];
+    long lineCount1 = Files.lines(path1).count();
+    long lineCount2 = Files.lines(path2).count();
+
+    String[][] dataTrade = new String[(int) lineCount1][9];
 
     int i = 0;
     try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("trade.csv"), "UTF-8"))) {
       while ((line = br.readLine()) != null) {
-        data[i] = line.split(",");
+        dataTrade[i] = line.split(",");
         i++;
+      }
+    } catch (IOException e) {
+      System.out.print("ファイルが存在しませんでした。ファイルを準備してください。");
+    } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+      System.out.println("配列の範囲外にアクセスしようとしました。");
+    }
+
+    String[][] dataStore = new String[(int) lineCount2][9];
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("store.csv"), "UTF-8"))) {
+     int a=0;
+      while ((line = br.readLine()) != null) {
+        dataStore[a] = line.split(",");
+        a++;
       }
     } catch (IOException e) {
       System.out.print("ファイルが存在しませんでした。ファイルを準備してください。");
@@ -34,142 +54,154 @@ public class YamatoCSVTranfer {
     try (PrintWriter pw = new PrintWriter(
         new BufferedWriter(new OutputStreamWriter(new FileOutputStream("yamato.csv"), "Shift-JIS")))) {
 
-      int num = 2;
-      int countList = 0;
-      while (data[num].length > 4) {
-        countList = num + 1;
-        num++;
+      int num1 = 2;
+      int countList1 = 0;
+      while (dataTrade[num1].length > 4) {
+        countList1 = num1 + 1;
+        num1++;
       }
 
-      for (int a = 2; a < countList; a++) {
-        pw.print(" ");
-        pw.print(",");
+      Address ad = new Address();
+      String[] address = ad.Address(dataStore, lineCount2);
+      String[] numAddress = new String[(int)lineCount2];
+      int num2=0;
+      for(int num3=2; num3<(int)lineCount2; num3++){
+        numAddress[num2]=dataStore[num3][10].replace(address[num2],"");
+        num2++;
+      }
 
-        pw.print(" ");
-        pw.print(",");
+      for (int a = 2; a < countList1; a++) {
+        int num4 = 0;
+        for (int b = 2; b < lineCount2; b++) {
+          if (dataTrade[a][1].equals(dataStore[b][7])) {
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print("発払い");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print("2023/01/20");
-        pw.print(",");
+            pw.print("2023/01/28");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(data[a][6]);// 電話番号
-        pw.print(",");
+            pw.print(dataTrade[a][6]);// 電話番号
+            pw.print(",");
 
-        pw.print(" ");
-        pw.print(",");
+            pw.print(" ");
+            pw.print(",");
 
-        pw.print(data[a][4]);// 郵便番号
-        pw.print(",");
+            pw.print(dataTrade[a][4]);// 郵便番号
+            pw.print(",");
 
-        pw.print(data[a][5]);// 住所
-        pw.print(",");
+            pw.print(dataTrade[a][5]);// 住所
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print(data[a][1]);// 会社名
-        pw.print(",");
+            pw.print("");// 会社名
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print(data[a][3]);// 氏名
-        pw.print(",");
+            pw.print(dataTrade[a][3]);// 氏名
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("######");// 依頼者電話番号
-        pw.print(",");
+            pw.print(dataStore[b][11]);// 依頼者電話番号
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("#####");// 依頼者郵便番号
-        pw.print(",");
+            pw.print(dataStore[b][9]);// 依頼者郵便番号
+            pw.print(",");
 
-        pw.print("###");// 依頼者住所
-        pw.print(",");
+            pw.print(address[num4]);// 依頼者住所
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print(numAddress[num4]);
+            pw.print(",");
 
-        pw.print("###");// 依頼者組織名
-        pw.print(",");
+            pw.print(dataStore[b][8]);// 依頼者組織名
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print(data[a][7]);
-        pw.print(",");
+            pw.print(dataTrade[a][7]);
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("######");// 依頼者電話番号
-        pw.print(",");
+            pw.print("");// 依頼者電話番号
+            pw.print(",");
 
-        pw.print("");
-        pw.print(",");
+            pw.print("");
+            pw.print(",");
 
-        pw.print("01");
-        pw.println();
+            pw.print("0569281163-    01 ");
+            pw.println();
+          }
+          num4++;
+        }
       }
       pw.close();
       System.out.println("銘柄残高のCSVファイルをYamato用に変換しました。");
@@ -179,6 +211,8 @@ public class YamatoCSVTranfer {
       System.out.println("data配列の範囲外にアクセスしようとしました。");
     } catch (NullPointerException e) {
       System.out.println("nullの範囲外にアクセスしようとしました。");
+    } catch (JSONException e) {
+      throw new RuntimeException(e);
     }
   }
 }
